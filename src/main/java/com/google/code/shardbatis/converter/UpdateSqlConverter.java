@@ -3,6 +3,7 @@
  */
 package com.google.code.shardbatis.converter;
 
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.update.Update;
 
@@ -27,9 +28,11 @@ public class UpdateSqlConverter extends AbstractSqlConverter {
 					"The argument statement must is instance of Update.");
 		}
 		Update update = (Update) statement;
-		String name = update.getTable().getName();
-		update.getTable()
-				.setName(this.convertTableName(name, params, mapperId));
+		for (Table table:update.getTables()
+			 ) {
+			String name = table.getName();
+			table.setName(this.convertTableName(name, params, mapperId));
+		}
 		return update;
 	}
 

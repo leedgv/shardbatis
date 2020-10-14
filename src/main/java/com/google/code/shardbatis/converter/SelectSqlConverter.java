@@ -5,59 +5,16 @@ package com.google.code.shardbatis.converter;
 
 import java.util.Iterator;
 
-import net.sf.jsqlparser.expression.AllComparisonExpression;
-import net.sf.jsqlparser.expression.AnyComparisonExpression;
-import net.sf.jsqlparser.expression.BinaryExpression;
-import net.sf.jsqlparser.expression.CaseExpression;
-import net.sf.jsqlparser.expression.DateValue;
-import net.sf.jsqlparser.expression.DoubleValue;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.ExpressionVisitor;
-import net.sf.jsqlparser.expression.Function;
-import net.sf.jsqlparser.expression.InverseExpression;
-import net.sf.jsqlparser.expression.JdbcParameter;
-import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.NullValue;
-import net.sf.jsqlparser.expression.Parenthesis;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.TimeValue;
-import net.sf.jsqlparser.expression.TimestampValue;
-import net.sf.jsqlparser.expression.WhenClause;
-import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseXor;
-import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
-import net.sf.jsqlparser.expression.operators.arithmetic.Division;
-import net.sf.jsqlparser.expression.operators.arithmetic.Multiplication;
-import net.sf.jsqlparser.expression.operators.arithmetic.Subtraction;
+import net.sf.jsqlparser.expression.*;
+import net.sf.jsqlparser.expression.operators.arithmetic.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.Between;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
-import net.sf.jsqlparser.expression.operators.relational.ItemsListVisitor;
-import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
-import net.sf.jsqlparser.expression.operators.relational.Matches;
-import net.sf.jsqlparser.expression.operators.relational.MinorThan;
-import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.FromItemVisitor;
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectVisitor;
-import net.sf.jsqlparser.statement.select.SubJoin;
-import net.sf.jsqlparser.statement.select.SubSelect;
-import net.sf.jsqlparser.statement.select.Union;
+import net.sf.jsqlparser.statement.select.*;
+import net.sf.jsqlparser.statement.values.ValuesStatement;
 
 /**
  * @author sean.he
@@ -110,13 +67,19 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 
 		}
 
-		@SuppressWarnings("unchecked")
-		public void visit(Union union) {
-			for (Iterator iter = union.getPlainSelects().iterator(); iter
-					.hasNext();) {
-				PlainSelect plainSelect = (PlainSelect) iter.next();
-				visit(plainSelect);
-			}
+		@Override
+		public void visit(SetOperationList setOperationList) {
+
+		}
+
+		@Override
+		public void visit(WithItem withItem) {
+
+		}
+
+		@Override
+		public void visit(ValuesStatement valuesStatement) {
+
 		}
 
 		public void visit(Table tableName) {
@@ -161,6 +124,11 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 		public void visit(Function function) {
 		}
 
+		@Override
+		public void visit(SignedExpression signedExpression) {
+
+		}
+
 		public void visit(GreaterThan greaterThan) {
 			visitBinaryExpression(greaterThan);
 		}
@@ -171,17 +139,18 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 
 		public void visit(InExpression inExpression) {
 			inExpression.getLeftExpression().accept(this);
-			inExpression.getItemsList().accept(this);
-		}
-
-		public void visit(InverseExpression inverseExpression) {
-			inverseExpression.getExpression().accept(this);
+			inExpression.getLeftItemsList().accept(this);
 		}
 
 		public void visit(IsNullExpression isNullExpression) {
 		}
 
 		public void visit(JdbcParameter jdbcParameter) {
+		}
+
+		@Override
+		public void visit(JdbcNamedParameter jdbcNamedParameter) {
+
 		}
 
 		public void visit(LikeExpression likeExpression) {
@@ -193,6 +162,11 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 		}
 
 		public void visit(LongValue longValue) {
+		}
+
+		@Override
+		public void visit(HexValue hexValue) {
+
 		}
 
 		public void visit(MinorThan minorThan) {
@@ -209,6 +183,16 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 
 		public void visit(NotEqualsTo notEqualsTo) {
 			visitBinaryExpression(notEqualsTo);
+		}
+
+		@Override
+		public void visit(BitwiseRightShift bitwiseRightShift) {
+
+		}
+
+		@Override
+		public void visit(BitwiseLeftShift bitwiseLeftShift) {
+
 		}
 
 		public void visit(NullValue nullValue) {
@@ -238,6 +222,16 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 				Expression expression = (Expression) iter.next();
 				expression.accept(this);
 			}
+
+		}
+
+		@Override
+		public void visit(NamedExpressionList namedExpressionList) {
+
+		}
+
+		@Override
+		public void visit(MultiExpressionList multiExpressionList) {
 
 		}
 
@@ -275,16 +269,36 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 		}
 
 		public void visit(AllComparisonExpression allComparisonExpression) {
-			allComparisonExpression.GetSubSelect().getSelectBody().accept(this);
+			allComparisonExpression.getSubSelect().getSelectBody().accept(this);
 		}
 
 		public void visit(AnyComparisonExpression anyComparisonExpression) {
-			anyComparisonExpression.GetSubSelect().getSelectBody().accept(this);
+			anyComparisonExpression.getSubSelect().getSelectBody().accept(this);
 		}
 
 		public void visit(SubJoin subjoin) {
 			subjoin.getLeft().accept(this);
-			subjoin.getJoin().getRightItem().accept(this);
+			//subjoin.getJoin().getRightItem().accept(this);
+		}
+
+		@Override
+		public void visit(LateralSubSelect lateralSubSelect) {
+
+		}
+
+		@Override
+		public void visit(ValuesList valuesList) {
+
+		}
+
+		@Override
+		public void visit(TableFunction tableFunction) {
+
+		}
+
+		@Override
+		public void visit(ParenthesisFromItem parenthesisFromItem) {
+
 		}
 
 		public void visit(Concat concat) {
@@ -308,6 +322,121 @@ public class SelectSqlConverter extends AbstractSqlConverter {
 
 		public void visit(BitwiseXor bitwiseXor) {
 			visitBinaryExpression(bitwiseXor);
+		}
+
+		@Override
+		public void visit(CastExpression castExpression) {
+
+		}
+
+		@Override
+		public void visit(Modulo modulo) {
+
+		}
+
+		@Override
+		public void visit(AnalyticExpression analyticExpression) {
+
+		}
+
+		@Override
+		public void visit(ExtractExpression extractExpression) {
+
+		}
+
+		@Override
+		public void visit(IntervalExpression intervalExpression) {
+
+		}
+
+		@Override
+		public void visit(OracleHierarchicalExpression oracleHierarchicalExpression) {
+
+		}
+
+		@Override
+		public void visit(RegExpMatchOperator regExpMatchOperator) {
+
+		}
+
+		@Override
+		public void visit(JsonExpression jsonExpression) {
+
+		}
+
+		@Override
+		public void visit(JsonOperator jsonOperator) {
+
+		}
+
+		@Override
+		public void visit(RegExpMySQLOperator regExpMySQLOperator) {
+
+		}
+
+		@Override
+		public void visit(UserVariable userVariable) {
+
+		}
+
+		@Override
+		public void visit(NumericBind numericBind) {
+
+		}
+
+		@Override
+		public void visit(KeepExpression keepExpression) {
+
+		}
+
+		@Override
+		public void visit(MySQLGroupConcat mySQLGroupConcat) {
+
+		}
+
+		@Override
+		public void visit(ValueListExpression valueListExpression) {
+
+		}
+
+		@Override
+		public void visit(RowConstructor rowConstructor) {
+
+		}
+
+		@Override
+		public void visit(OracleHint oracleHint) {
+
+		}
+
+		@Override
+		public void visit(TimeKeyExpression timeKeyExpression) {
+
+		}
+
+		@Override
+		public void visit(DateTimeLiteralExpression dateTimeLiteralExpression) {
+
+		}
+
+		@Override
+		public void visit(NotExpression notExpression) {
+
+		}
+
+		@Override
+		public void visit(NextValExpression nextValExpression) {
+
+		}
+
+		@Override
+		public void visit(CollateExpression collateExpression) {
+
+		}
+
+		@Override
+		public void visit(SimilarToExpression similarToExpression) {
+
 		}
 
 		public void visit(StringValue stringValue) {

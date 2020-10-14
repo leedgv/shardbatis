@@ -31,7 +31,7 @@ public class ShardPluginTest {
 		sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
 	}
 
-	@Test
+	//@Test
 	public void test_1() {
 		AppTestDO testDO = new AppTestDO();
 		testDO.setCnt("just a test");
@@ -47,7 +47,7 @@ public class ShardPluginTest {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void test_2(){
 		AppTestDO testDO = new AppTestDO();
 		testDO.setCnt("just a test222");
@@ -79,7 +79,7 @@ public class ShardPluginTest {
 //		}
 //	}
 	
-	@Test
+	//@Test
 	public void test_4(){
 		AppTestDO testDO = new AppTestDO();
 		testDO.setCnt("just a test222");

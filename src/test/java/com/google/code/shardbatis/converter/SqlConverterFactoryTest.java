@@ -39,7 +39,7 @@ public class SqlConverterFactoryTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void test_1() throws IOException, ShardException {
 		SqlConverterFactory cf = SqlConverterFactory.getInstance();
 		BufferedReader reader = new BufferedReader(Resources

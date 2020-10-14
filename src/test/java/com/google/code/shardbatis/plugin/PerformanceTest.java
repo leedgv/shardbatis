@@ -25,7 +25,7 @@ public class PerformanceTest {
 	 * @throws Exception
 	 */
 	@Ignore
-	@Test
+	//@Test
 	public void testWithPlugin() throws Exception{
 		String resource = "MapperConfig.xml";
 		Reader reader = Resources.getResourceAsReader(resource);
@@ -74,7 +74,7 @@ public class PerformanceTest {
 	 * @throws Exception
 	 */
 //	@Ignore
-	@Test
+	//@Test
 	public void testNoPlugin() throws Exception{
 		String resource = "MapperConfig_3.xml";
 		Reader reader = Resources.getResourceAsReader(resource);
